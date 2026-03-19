@@ -47,11 +47,7 @@ fnn (Not f1) = Not (fnn f1)
 
 --Ejercicio 2
 fnc :: Prop -> Prop
-fnc (And f1 (Or f2 f3)) = fnn(Or (And f1 f2) (And f1 f3))
-fnc (Or f1 (And f2 f3)) = fnn(And (Or f1 f2) (Or f1 f3))
-fnc (And (Or f1 f2) (f3)) = fnn(Or (And f1 f3) (And f2 f3))
-fnc (Or (And f1 f2) f3) = fnn(And (Or f1 f3) (Or f2 f3))
-fnc x = fnn(x)
+fnc = undefined
 
 {-
 RESOLUCION BINARIA
