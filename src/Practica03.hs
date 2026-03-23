@@ -45,7 +45,17 @@ fnn (Not f1) = Not (fnn f1)
 
 --Ejercicio 2
 fnc :: Prop -> Prop
-fnc = undefined
+fnc prop = fncAux(fnn prop)
+
+fncAux :: Prop -> Prop
+fncAux (And a b) = And (fncAux a) (fncAux b)
+fncAux (Or a b) = distribuir (fncAux a) (fncAux b)
+fncAux x = x
+
+distribuir :: Prop -> Prop -> Prop
+distribuir f1 (And f2 f3) = And (distribuir f1 f2) (distribuir f1 f3)
+distribuir (And f1 f2) f3 = And (distribuir f1 f3) (distribuir f2 f3)
+distribuir f1 f2 = Or f1 f2
 
 {-
 RESOLUCION BINARIA
