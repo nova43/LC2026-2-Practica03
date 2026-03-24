@@ -67,7 +67,18 @@ type Clausula = [Literal]
 
 --Ejercicio 1
 clausulas :: Prop -> [Clausula]
-clausulas = undefined
+clausulas (Cons x) = [[]]
+clausulas (Var p) = [[Var p]]
+clausulas (Not p) = [[Not p]]
+clausulas (Or p q) = [clausulasAux(Or p q)]
+clausulas (And p q) = clausulas(p) ++ clausulas(q)
+
+clausulasAux :: Prop -> Clausula
+clausulasAux (Cons _) = []
+clausulasAux (Var p) = [Var p]
+clausulasAux (Not p) = [(Not p)]
+clausulasAux (Or f1 f2) = clausulasAux(f1) ++ clausulasAux(f2)
+clausulasAux x = []
 
 --Ejercicio 2
 resolucion :: Clausula -> Clausula -> Clausula
