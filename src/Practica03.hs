@@ -71,7 +71,7 @@ clausulas (Cons x) = [[]]
 clausulas (Var p) = [[Var p]]
 clausulas (Not p) = [[Not p]]
 clausulas (Or p q) = [clausulasAux(Or p q)]
-clausulas (And p q) = quitarRepetidos(clausulas(p) ++ clausulas(q))
+clausulas (And p q) = (clausulas(p) ++ clausulas(q))
 
 clausulasAux :: Prop -> Clausula
 clausulasAux (Cons _) = []
