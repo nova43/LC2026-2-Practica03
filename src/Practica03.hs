@@ -92,7 +92,34 @@ quitarRepetidos (x:xs)
 
 --Ejercicio 2
 resolucion :: Clausula -> Clausula -> Clausula
-resolucion = undefined
+resolucion c1 c2 = 
+    case encontrarComplemento c1 c2 of
+        (Just l, rest1, rest2) -> quitarRepetidos (rest1 ++ rest2)
+        (Nothing, _, _) -> quitarRepetidos(c1 ++ c2)  -- Si no hay complemento
+
+encontrarComplemento :: Clausula -> Clausula -> (Maybe Literal, Clausula, Clausula)
+encontrarComplemento [] _ = (Nothing, [], [])
+encontrarComplemento (l:ls) c2 =
+    case eliminarComplemento l c2 of
+        Just c2Sin -> (Just l, ls, c2Sin)
+        Nothing -> 
+            case encontrarComplemento ls c2 of
+                (Nothing, rest1, rest2) -> (Nothing, l:rest1, rest2)
+                (Just l', rest1, rest2) -> (Just l', l:rest1, rest2)
+
+
+complementario :: Literal -> Literal -> Bool
+complementario (Var x) (Not (Var y)) = x == y
+complementario (Not (Var x)) (Var y) = x == y
+complementario _ _ = False
+
+eliminarComplemento :: Literal -> Clausula -> Maybe Clausula
+eliminarComplemento _ [] = Nothing
+eliminarComplemento l (x:xs)
+    | complementario l x = Just xs
+    | otherwise = case eliminarComplemento l xs of
+        Just rest -> Just (x:rest)
+        Nothing -> Nothing
 
 {-
 ALGORITMO DE SATURACION
