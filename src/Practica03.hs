@@ -71,14 +71,24 @@ clausulas (Cons x) = [[]]
 clausulas (Var p) = [[Var p]]
 clausulas (Not p) = [[Not p]]
 clausulas (Or p q) = [clausulasAux(Or p q)]
-clausulas (And p q) = clausulas(p) ++ clausulas(q)
+clausulas (And p q) = quitarRepetidos(clausulas(p) ++ clausulas(q))
 
 clausulasAux :: Prop -> Clausula
 clausulasAux (Cons _) = []
 clausulasAux (Var p) = [Var p]
 clausulasAux (Not p) = [(Not p)]
-clausulasAux (Or f1 f2) = clausulasAux(f1) ++ clausulasAux(f2)
+clausulasAux (Or f1 f2) = quitarRepetidos(clausulasAux(f1) ++ clausulasAux(f2))
 clausulasAux x = []
+
+pertenece :: Eq a => a -> [a] -> Bool
+pertenece _ [] = False
+pertenece x (y:ys) = x == y || pertenece x ys
+
+quitarRepetidos :: Eq a => [a] -> [a]
+quitarRepetidos [] = []
+quitarRepetidos (x:xs)
+    | pertenece x xs = quitarRepetidos xs
+    | otherwise = x : quitarRepetidos xs
 
 --Ejercicio 2
 resolucion :: Clausula -> Clausula -> Clausula
