@@ -125,11 +125,27 @@ eliminarComplemento l (x:xs)
 ALGORITMO DE SATURACION
 -}
 
---Ejercicio 1
+-- Ejercicio 1
 hayResolvente :: Clausula -> Clausula -> Bool
-hayResolvente = undefined
+hayResolvente [] _ = False
+hayResolvente (l:ls) c2 = 
+    case eliminarComplemento l c2 of
+        Just _  -> True
+        Nothing -> hayResolvente ls c2
 
 --Ejercicio 2
 --Funcion principal que pasa la formula proposicional a fnc e invoca a res con las clausulas de la formula.
+rs :: [Clausula] -> [Clausula]
+rs s = quitarRepetidos (s ++ nuevos)
+    where nuevos = [resolucion c1 c2 | c1 <- s, c2 <- s, hayResolvente c1 c2]
+
 saturacion :: Prop -> Bool
-saturacion = undefined
+saturacion f = saturacionAux (quitarRepetidos (clausulas (fnc f)))
+  where
+    saturacionAux s
+        | [] `pertenece` s = False 
+        | otherwise = 
+            let nextS = rs s
+            in if length nextS == length s 
+               then True 
+               else saturacionAux nextS
