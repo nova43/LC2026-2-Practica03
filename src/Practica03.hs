@@ -135,17 +135,17 @@ hayResolvente (l:ls) c2 =
 
 --Ejercicio 2
 --Funcion principal que pasa la formula proposicional a fnc e invoca a res con las clausulas de la formula.
-rs :: [Clausula] -> [Clausula]
-rs s = quitarRepetidos (s ++ nuevos)
-    where nuevos = [resolucion c1 c2 | c1 <- s, c2 <- s, hayResolvente c1 c2]
-
 saturacion :: Prop -> Bool
 saturacion f = saturacionAux (quitarRepetidos (clausulas (fnc f)))
   where
     saturacionAux s
         | [] `pertenece` s = False 
         | otherwise = 
-            let nextS = rs s
-            in if length nextS == length s 
+            let clausulasRes = rs s
+            in if length clausulasRes == length s 
                then True 
-               else saturacionAux nextS
+               else saturacionAux clausulasRes
+
+rs :: [Clausula] -> [Clausula]
+rs s = quitarRepetidos (s ++ nuevos)
+    where nuevos = [resolucion c1 c2 | c1 <- s, c2 <- s, hayResolvente c1 c2]
